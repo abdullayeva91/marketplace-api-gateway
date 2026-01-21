@@ -21,22 +21,31 @@ ext {
     set('springCloudVersion', "2024.0.0")
 }
 
-dependencies {dependencies {
+dependencies {
+    // 1. Gateway Core (Reactive - WebFlux)
+    implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // 2. Security (Reactive versiyası)
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // 3. JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JSON serialization üçün
-    implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // 4. Netty üçün MacOS (M1/M2) optimizasiyası
+    runtimeOnly "io.netty:netty-resolver-dns-native-macos:4.1.100.Final:osx-aarch_64"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-    dependencyManagement {
+dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
-    runtimeOnly 'org.postgresql:postgresql'
 
-    tasks.named('test') {
+tasks.named('test') {
     useJUnitPlatform()
-}}
+}

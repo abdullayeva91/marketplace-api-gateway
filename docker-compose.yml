@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  api-gateway:
+    build:
+      context: ./marketplace-api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - marketplace-net
+
+  auth-service:
+    build:
+      context: ./auth-service
+    ports:
+      - "8081:8081"
+    networks:
+      - marketplace-net
+
+  product-service:
+    build:
+      context: ./product-service
+    ports:
+      - "8082:8082"
+    networks:
+      - marketplace-net
+
+  notification-service:
+    build:
+      context: ./notification-service
+    ports:
+      - "8083:8083"
+    networks:
+      - marketplace-net
+
+  order-service:
+    build:
+      context: ./order-service
+    ports:
+      - "8084:8084"
+    networks:
+      - marketplace-net
+
+  payment-service:
+    build:
+      context: ./payment-service
+    ports:
+      - "8085:8085"
+    networks:
+      - marketplace-net
+
+networks:
+  marketplace-net:
+    driver: bridge
