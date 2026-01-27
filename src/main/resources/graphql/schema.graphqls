@@ -1,0 +1,28 @@
+type Product {
+    id: ID!
+    name: String
+    price: Float
+    category: String
+    quantity: Int
+    description: String
+    rating: Float
+    createdAt: String
+
+}
+
+type Order {
+    id: ID!
+    status: String
+    totalAmount: Float
+    quantity: Int
+    price: Float
+    orderStatus: String
+    orderDate: String
+
+}
+
+
+type Query {
+    getAllOrders(role: String): [Order]
+    findAllProducts: [Product]
+}

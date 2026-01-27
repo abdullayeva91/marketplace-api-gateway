@@ -13,13 +13,10 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
-                .csrf(csrf -> csrf.disable()) // WebSocket bağlantısı üçün CSRF mütləq bağlı olmalıdır
+                .csrf(csrf -> csrf.disable())
                 .authorizeExchange(exchanges -> exchanges
-                        // WebSocket yolunu hər kəs üçün açırıq
                         .pathMatchers("/ws-notification/**").permitAll()
-                        // Auth yollarını açırıq
                         .pathMatchers("/api/auth/**").permitAll()
-                        // Qalan hər şeyə hələlik icazə veririk
                         .anyExchange().permitAll()
                 )
                 .build();

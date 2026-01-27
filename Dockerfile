@@ -1,17 +1,10 @@
-# Stage 1: Build
-FROM gradle:8.5-jdk21 AS build
+FROM gradle:8.10-jdk21-alpine AS builder
+WORKDIR /build
+COPY . .
+RUN gradle clean bootJar --no-daemon
+
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-
-COPY build.gradle settings.gradle ./
-COPY gradle ./gradle
-COPY src ./src
-
-RUN gradle clean build -x test --no-daemon
-
-# Stage 2: Run
-FROM eclipse-temurin:21-jdk
-WORKDIR /app
-
-COPY --from=build /app/build/libs/*.jar app.jar
-
+COPY --from=builder /build/build/libs/*.jar app.jar
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

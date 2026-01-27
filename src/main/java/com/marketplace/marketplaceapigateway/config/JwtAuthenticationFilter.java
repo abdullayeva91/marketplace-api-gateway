@@ -26,13 +26,11 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getPath().toString();
 
-        // --- 1. WHITELIST (İcazə verilən yollar) ---
-        // Auth yolları və WebSocket yolu filtrdən yan keçməlidir
         if (path.contains("/api/auth") || path.contains("/ws-notification")) {
             return chain.filter(exchange);
         }
 
-        // --- 2. TOKEN YOXLANIŞI ---
+
         String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return unauthorized(exchange);
@@ -53,7 +51,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             String userId = claims.get("userId") != null ? claims.get("userId").toString() : "";
             String role = claims.get("role") != null ? claims.get("role").toString() : "";
 
-            // Request-i mutate edib header əlavə edirik (arxa plandakı servislər üçün)
             ServerHttpRequest request = exchange.getRequest().mutate()
                     .header("X-Auth-User-Id", userId)
                     .header("X-Auth-User-Role", role)
@@ -74,7 +71,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        // Filtrin ən birinci işləməsi üçün yüksək öncəlik veririk
         return -1;
     }
 }
